@@ -229,7 +229,12 @@ function installDependencies()
 		echo "Main Depepencies Successfully Installed"
 	fi
 	sudo apt-get install ffmpeg -y --fix-missing || log_error "Unable to install ffmpeg"
-	sudo pip3 install RPi.GPIO || log_error "Unable to install pip3 packages"
+	#check in RPI.GPIO is already installed system-wide
+	if [[ $(dpkg-query -l python3-rpi.gpio | grep python3-rpi.gpio | cut -c1-2) == ii* ]]; then
+		echo "RPi.GPIO already installed system-wide"
+	else
+		sudo pip3 install RPi.GPIO || log_error "Unable to install pip3 packages"
+	fi
 	if [ -f "/usr/local/bin/composer" ]; then
 		log_info "Composer already installed!"
 	else
